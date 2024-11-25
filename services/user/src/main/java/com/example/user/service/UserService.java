@@ -1,36 +1,38 @@
 package com.example.user.service;
 
 import com.example.user.exceptions.UserAlreadyExistsException;
-import com.example.user.model.dto.UserRegDto;
-import com.example.user.model.entity.UserEntity;
+import com.example.user.model.entity.User;
 import com.example.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
 @Service
-public class UserService implements UserDetailsService {
+public class UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public void regUser(UserRegDto userDto) {
-        var existedUser = userRepository.findByUsername(userDto.getUsername());
+    public void regUser(User user) {
+        var existedUser = userRepository.findByUsername(user.getUsername());
         if (existedUser.isPresent()) {
-            throw new UserAlreadyExistsException("User with username " + userDto.getUsername() + " already exists");
+            throw new UserAlreadyExistsException("User with username " + user.getUsername() + " already exists");
         }
-        var userEntity = new UserEntity();
-        userEntity.setUsername(userDto.getUsername());
-        userEntity.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        userRepository.save(userEntity);
+        userRepository.save(user);
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public User getByUsername(String username) {
         return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
+    }
+
+    public UserDetailsService userDetailsService() {
+        return this::getByUsername;
+    }
+
+    public User getCurrentUser() {
+        var username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return getByUsername(username);
     }
 }

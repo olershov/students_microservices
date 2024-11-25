@@ -1,7 +1,7 @@
 package com.example.user.model.entity;
 
 import jakarta.persistence.*;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,9 +9,13 @@ import java.util.Collection;
 import java.util.List;
 
 @Setter
+@Getter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "t_user")
-public class UserEntity implements UserDetails {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,12 +34,22 @@ public class UserEntity implements UserDetails {
     }
 
     @Override
-    public String getPassword() {
-        return password;
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
     @Override
-    public String getUsername() {
-        return username;
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
