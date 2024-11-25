@@ -3,6 +3,7 @@ package com.example.user.exceptions;
 import com.example.user.model.dto.ErrorDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -14,9 +15,12 @@ public class RestControllerExceptionHandler extends ResponseEntityExceptionHandl
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<ErrorDto> handleException(UserAlreadyExistsException e) {
-        var message = e.getMessage();
-        logger.error(message);
-        return getErrorDTOResponseEntity(HttpStatus.CONFLICT, message);
+        return getErrorDTOResponseEntity(HttpStatus.CONFLICT, e.getMessage());
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<ErrorDto> handleException(UsernameNotFoundException e) {
+        return getErrorDTOResponseEntity(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
     private ResponseEntity<ErrorDto> getErrorDTOResponseEntity(HttpStatus httpStatus, String message) {

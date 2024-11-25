@@ -1,7 +1,6 @@
 package com.example.user.controller;
 
 import com.example.user.model.dto.UserRegDto;
-import com.example.user.model.entity.UserEntity;
 import com.example.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -21,7 +20,7 @@ public class UserController {
     @PostMapping(REG)
     public ResponseEntity<?> regUser(@Valid @RequestBody UserRegDto userDto,
                                      @RequestHeader(name = "Authorization") String jwtToken) {
-        userService.save(userDto);
+        userService.regUser(userDto);
         return ResponseEntity.ok().build();
     }
 
