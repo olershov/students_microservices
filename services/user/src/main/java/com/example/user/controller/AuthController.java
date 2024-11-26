@@ -31,9 +31,9 @@ public class AuthController {
 
     @PostMapping(LOGIN)
     public ResponseEntity<?> login(@Valid @RequestBody UserAuthDto authDto) {
-        LOGGER.info("User authorization request: " + authDto.getUsername());
+        LOGGER.info("User authentication request: " + authDto.getUsername());
         var result = authenticationService.signIn(authDto);
-        LOGGER.info(authDto.getUsername() + ": successful authorization");
+        LOGGER.info(authDto.getUsername() + ": successful authentication");
         return ResponseEntity.ok(result);
     }
 }

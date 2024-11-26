@@ -18,8 +18,13 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
+    /**
+     * Регистрация пользователя
+     *
+     * @param regDto данные пользователя
+     * @return токен
+     */
     public AuthResponse signUp(UserRegDto regDto) {
-
         var user =  User.builder()
                 .username(regDto.getUsername())
                 .password(passwordEncoder.encode(regDto.getPassword()))
@@ -29,6 +34,12 @@ public class AuthenticationService {
         return new AuthResponse(user.getUsername(), jwt);
     }
 
+    /**
+     * Аутентификация пользователя
+     *
+     * @param authDto данные пользователя
+     * @return токен
+     */
     public AuthResponse signIn(UserAuthDto authDto) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 authDto.getUsername(),
