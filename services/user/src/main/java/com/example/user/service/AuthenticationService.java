@@ -24,9 +24,7 @@ public class AuthenticationService {
                 .username(regDto.getUsername())
                 .password(passwordEncoder.encode(regDto.getPassword()))
                 .build();
-
         userService.regUser(user);
-
         var jwt = jwtService.generateToken(user);
         return new AuthResponse(user.getUsername(), jwt);
     }
@@ -36,10 +34,7 @@ public class AuthenticationService {
                 authDto.getUsername(),
                 authDto.getPassword()
         ));
-
         var user = userService.loadUserByUsername(authDto.getUsername());
-
-
         var jwt = jwtService.generateToken(user);
         return new AuthResponse(user.getUsername(), jwt);
     }

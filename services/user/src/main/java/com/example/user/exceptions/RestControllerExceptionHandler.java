@@ -1,5 +1,6 @@
 package com.example.user.exceptions;
 
+import com.example.user.controller.AuthController;
 import com.example.user.model.dto.ErrorDto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -13,10 +14,13 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 
 @RestControllerAdvice(basePackages = "com.example.user.controller")
 public class RestControllerExceptionHandler extends ResponseEntityExceptionHandler {
+
+    private static final Logger LOGGER = Logger.getLogger(RestControllerExceptionHandler.class.getName());
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
@@ -28,6 +32,7 @@ public class RestControllerExceptionHandler extends ResponseEntityExceptionHandl
                 errors.add(objectError.getObjectName() + ": " + objectError.getDefaultMessage()));
 
         final var error = new ErrorDto("The argument(s) have not been validated", errors);
+        LOGGER.info(error.toString());
         return handleExceptionInternal(ex, error, headers, HttpStatus.BAD_REQUEST, request);
     }
 
@@ -43,10 +48,11 @@ public class RestControllerExceptionHandler extends ResponseEntityExceptionHandl
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ErrorDto> handleException(BadCredentialsException e) {
-        return getErrorDTOResponseEntity(HttpStatus.UNAUTHORIZED, "Password is incorrect");
+        return getErrorDTOResponseEntity(HttpStatus.UNAUTHORIZED, e.getMessage());
     }
 
     private ResponseEntity<ErrorDto> getErrorDTOResponseEntity(HttpStatus httpStatus, String message) {
+        LOGGER.info(message);
         final var response = new ErrorDto(message, httpStatus.value() + "");
         return new ResponseEntity<>(response, httpStatus);
     }

@@ -14,12 +14,12 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 @Service
 public class JwtService {
-    @Value("${token.signing.key}")
-    private String jwtSigningKey;
+    private final String jwtSigningKey = (UUID.randomUUID().toString() + UUID.randomUUID()).replaceAll("-", "");
     @Value("${token.expiration}")
     private Long expiration;
 
