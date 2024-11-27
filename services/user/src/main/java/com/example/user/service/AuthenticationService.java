@@ -4,6 +4,7 @@ import com.example.user.model.dto.AuthResponse;
 import com.example.user.model.dto.UserAuthDto;
 import com.example.user.model.dto.UserRegDto;
 import com.example.user.model.entity.User;
+import com.example.user.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

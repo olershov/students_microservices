@@ -1,7 +1,8 @@
-package com.example.student.service;
+package com.example.student.service.impl;
 
 import com.example.student.model.entity.Student;
 import com.example.student.repository.StudentRepository;
+import com.example.student.service.interfaces.StudentService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +21,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Optional<Student> getStudentById(Long id) {
-        return studentRepository.findById(id);
+    public Optional<Student> getStudentByGradeBook(String gradeBookNumber) {
+        return studentRepository.findStudentByGradeBookNumber(gradeBookNumber);
     }
-
-
 }
