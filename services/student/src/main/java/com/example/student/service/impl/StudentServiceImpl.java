@@ -21,7 +21,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Optional<Student> getStudentByGradeBook(String gradeBookNumber) {
-        return studentRepository.findStudentByGradeBookNumber(gradeBookNumber);
+    public Student getStudentByGradeBook(String gradeBookNumber) {
+        return studentRepository.findStudentByGradeBookNumber(gradeBookNumber).orElse(null);
     }
 }

@@ -1,0 +1,34 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://student.example.com/generatedXml"
+           targetNamespace="http://student.example.com/generatedXml"
+           elementFormDefault="qualified">
+
+    <xs:element name="GetStudentRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="gradeBookNumber" type="xs:string" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="GetStudentResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="student" type="tns:StudentSoap" minOccurs="0"/>
+                <xs:element name="students" type="tns:StudentSoap" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="StudentSoap">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="firstName" type="xs:string"/>
+            <xs:element name="surname" type="xs:string"/>
+            <xs:element name="patronymic" type="xs:string"/>
+            <xs:element name="gradeBookNumber" type="xs:string"/>
+            <xs:element name="faculty" type="xs:string"/>
+            <xs:element name="photoUrl" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

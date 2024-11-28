@@ -1,6 +1,8 @@
 package com.example.student.service;
 
-import com.example.student.service.interfaces.StudentService;
+import com.example.student.endpoint.StudentEndpoint;
+import com.example.student.generatedxml.GetStudentRequest;
+import com.example.student.generatedxml.GetStudentResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -13,25 +15,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class KafkaReceiverService {
 
-    private final KafkaTemplate<String, String> kafkaTemplate;
-    private final StudentService studentService;
+    private final KafkaTemplate<String, GetStudentResponse> kafkaTemplate;
+    private final StudentEndpoint studentEndpoint;
 
     @KafkaListener(topics = "${spring.kafka.request.topic}", groupId = "${spring.kafka.group-id}")
     public void listen(String message, @Header(KafkaHeaders.REPLY_TOPIC) String replyTopic) {
-        // Обработка сообщения
-        String response = processMessage(message);
-
-        // Отправка ответа обратно в указанный топик
-        ProducerRecord<String, String> replyRecord = new ProducerRecord<>(replyTopic, response);
+        var response = processMessage(message);
+        ProducerRecord<String, GetStudentResponse> replyRecord = new ProducerRecord<>(replyTopic, response);
         kafkaTemplate.send(replyRecord);
     }
 
-    private String processMessage(String message) {
-
-        if (message == null) {
-            return studentService.getAllStudents().toString();
-        } else {
-            return studentService.getStudentByGradeBook(message).toString();
-        }
+    private GetStudentResponse processMessage(String message) {
+         var request = new GetStudentRequest();
+         request.setGradeBookNumber(message);
+         return studentEndpoint.getStudent(request);
     }
 }
