@@ -14,11 +14,12 @@
     <xs:element name="GetStudentResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="student" type="tns:StudentSoap" minOccurs="0"/>
                 <xs:element name="students" type="tns:StudentSoap" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
+
+    <xs:element name="GetStudentsRequest"/>
 
     <xs:complexType name="StudentSoap">
         <xs:sequence>

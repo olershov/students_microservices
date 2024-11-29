@@ -18,16 +18,16 @@ public class StudentController {
     private static final Logger LOGGER = Logger.getLogger(StudentController.class.getName());
 
     @GetMapping("/all")
-    public ResponseEntity<?> getAllStudents() {
+    public ResponseEntity<String> getAllStudents() {
         LOGGER.info("Request to get all students");
-        studentService.getAllStudents();
-        return ResponseEntity.ok().build();
+        var result = studentService.getAllStudents();
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/{gradeBook}")
-    public ResponseEntity<?> getStudentByGradeBook(@PathVariable String gradeBook) {
+    public ResponseEntity<String> getStudentByGradeBook(@PathVariable String gradeBook) {
         LOGGER.info("Request to get student with grade book number = " + gradeBook);
-        studentService.getStudentByGradeBook(gradeBook);
-        return ResponseEntity.ok().build();
+        var result = studentService.getStudentByGradeBook(gradeBook);
+        return ResponseEntity.ok(result);
     }
 }
