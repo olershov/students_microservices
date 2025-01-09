@@ -5,6 +5,7 @@ import io.minio.http.Method;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.io.File;
@@ -19,18 +20,22 @@ public class MinioRepository {
 
     private final MinioClient minioClient;
     public static final String STUDENTS_PHOTO_BUCKET = "student";
+    @Value("${photo.baseUri}")
+    private String basePath;
 
     @PostConstruct
     public void init() {
         if (!bucketExists(STUDENTS_PHOTO_BUCKET)) {
             createBucket(STUDENTS_PHOTO_BUCKET);
         }
-       var path1 = new File("services/student/src/main/java/com/example/student/photo/123456.jpg").getAbsolutePath();
-       var path2 = new File("services/student/src/main/java/com/example/student/photo/345678.jpg").getAbsolutePath();
-       var path3 = new File("services/student/src/main/java/com/example/student/photo/654321.jpg").getAbsolutePath();
-       uploadFile("123456", path1);
-       uploadFile("345678", path2);
-       uploadFile("654321", path3);
+
+        var path1 = new File(basePath + "123456.jpg").getAbsolutePath();
+        var path2 = new File(basePath + "345678.jpg").getAbsolutePath();
+        var path3 = new File(basePath + "654321.jpg").getAbsolutePath();
+
+        uploadFile("123456", path1);
+        uploadFile("345678", path2);
+        uploadFile("654321", path3);
     }
 
     public void uploadFile(String objectName, String filePath) {
